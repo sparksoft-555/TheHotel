@@ -1,12 +1,16 @@
 class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
   has_secure_password
 
   # Roles for the hotel management system
-  ROLES = %w[customer manager chef cashier accountant].freeze
+  enum role: { admin: 'admin', manager: 'manager', kitchen: 'kitchen', accountant: 'accountant', customer: 'customer' }
 
   validates :email, presence: true, uniqueness: true
   validates :name, presence: true
-  validates :role, inclusion: { in: ROLES }
+  validates :role, inclusion: { in: roles.keys }
 
   # Employee-related associations
   has_many :work_logs, dependent: :destroy

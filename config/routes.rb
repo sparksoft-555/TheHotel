@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Hotel Management System routes
@@ -6,15 +7,11 @@ Rails.application.routes.draw do
   get "dashboard", to: "home#dashboard"
 
   # Menu management
-  resources :menu, only: [ :index, :show ] do
+  resources :menu, except: [:destroy] do
     collection do
       get :manage
-      get :new
-      post :create
     end
     member do
-      get :edit
-      patch :update
       patch :toggle_availability
     end
   end
@@ -53,4 +50,9 @@ Rails.application.routes.draw do
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+
+  namespace :admin do
+    root to: 'dashboard#index'
+    resources :users
+  end
 end

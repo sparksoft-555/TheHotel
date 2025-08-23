@@ -40,7 +40,7 @@
       </div>
     <% end %>
 
-    <%= form_with(model: @menu_item, url: create_menu_index_path, method: :post) do |form| %>
+    <%= form_with(model: @menu_item, url: menu_index_path, method: :post) do |form| %>
       <div class="form-group">
         <%= form.label :name %>
         <%= form.text_field :name, required: true %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 9) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_23_214124) do
   create_table "bills", force: :cascade do |t|
     t.integer "order_id", null: false
     t.decimal "total_amount", precision: 10, scale: 2, null: false
@@ -119,7 +119,12 @@ ActiveRecord::Schema[7.1].define(version: 9) do
     t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["role"], name: "index_users_on_role"
   end
 
