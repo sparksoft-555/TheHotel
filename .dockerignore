@@ -1,0 +1,39 @@
+# See https://docs.docker.com/engine/reference/builder/#dockerignore-file for more about ignoring files.
+
+# Ignore git directory.
+/.git/
+/.gitignore
+
+# Ignore all environment files.
+/.env*
+
+# Ignore all logfiles and tempfiles.
+/_build/
+/deps/
+/*.ez
+erl_crash.dump
+/log/*
+!/log/.keep
+/tmp/*
+!/tmp/.keep
+
+# Ignore assets build directory
+/assets/node_modules/
+/assets/package-lock.json
+/assets/yarn.lock
+
+# Ignore Phoenix live reload files
+/lib/hotel_management_web/tmp/
+
+# Ignore CI service files.
+/.github
+
+# Ignore Docker-related files (these are for building, not part of the app)
+Dockerfile*
+docker-compose.yml
+
+# Ignore editor files
+/.vscode/
+/.idea/
+*.swp
+*.swo

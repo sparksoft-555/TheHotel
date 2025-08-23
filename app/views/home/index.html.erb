@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hotel Management System</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+      body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; }
+      .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+      .header { text-align: center; color: #333; margin-bottom: 30px; }
+      .hotel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+      .hotel-card { border: 1px solid #ddd; border-radius: 8px; padding: 20px; background: #f9f9f9; }
+      .hotel-name { font-size: 1.5em; font-weight: bold; color: #2c3e50; margin-bottom: 10px; }
+      .room-info { color: #666; margin: 5px 0; }
+      .available { color: #27ae60; font-weight: bold; }
+      .nav-link { display: inline-block; margin: 10px; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 5px; }
+      .nav-link:hover { background: #2980b9; }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🏨 Hotel Management System</h1>
+        <p>Welcome to your hotel management dashboard</p>
+        <div>
+          <a href="/" class="nav-link">Home</a>
+          <a href="/dashboard" class="nav-link">Dashboard</a>
+          <a href="/menu" class="nav-link">Menu Management</a>
+          <a href="/orders" class="nav-link">Orders</a>
+          <a href="/inventory" class="nav-link">Inventory</a>
+        </div>
+      </div>
+
+      <h2>Hotel Properties</h2>
+      <div class="hotel-grid">
+        <% @hotels.each do |hotel| %>
+          <div class="hotel-card">
+            <div class="hotel-name"><%= hotel[:name] %></div>
+            <div class="room-info">Total Rooms: <%= hotel[:rooms] %></div>
+            <div class="room-info">Available: <span class="available"><%= hotel[:available] %></span></div>
+            <div class="room-info">Occupied: <%= hotel[:rooms] - hotel[:available] %></div>
+            <div class="room-info">Occupancy Rate: <%= ((hotel[:rooms] - hotel[:available]).to_f / hotel[:rooms] * 100).round(1) %>%</div>
+          </div>
+        <% end %>
+      </div>
+
+      <div style="margin-top: 30px; padding: 20px; background: #ecf0f1; border-radius: 8px;">
+        <h3>Quick Actions</h3>
+        <p>🔧 System Status: <strong style="color: #27ae60;">Running</strong></p>
+        <p>📱 QR Code Ordering: <strong>Active</strong></p>
+        <p>🍽️ Kitchen Management: <strong>Online</strong></p>
+        <p>💰 Cashier System: <strong>Ready</strong></p>
+      </div>
+    </div>
+  </body>
+</html>

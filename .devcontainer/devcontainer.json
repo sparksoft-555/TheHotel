@@ -1,0 +1,24 @@
+{
+  "name": "Hotel Management Rails App",
+  "image": "mcr.microsoft.com/devcontainers/ruby:3.2",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    }
+  },
+  "forwardPorts": [3000],
+  "postCreateCommand": "bundle install && rails db:setup",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rebornix.Ruby",
+        "wingrunr21.vscode-ruby",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-json"
+      ]
+    }
+  },
+  "mounts": [
+    "source=hotel-management-bundler,target=/usr/local/bundle,type=volume"
+  ]
+}
