@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Manage Menu - Hotel Management System</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; }
+    .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .header { text-align: center; color: #333; margin-bottom: 30px; }
+    .nav-link { display: inline-block; margin: 10px; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 5px; }
+    .nav-link:hover { background: #2980b9; }
+    .menu-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    .menu-table th, .menu-table td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+    .menu-table th { background: #3498db; color: white; }
+    .menu-table tr:hover { background: #f5f5f5; }
+    .action-btn { padding: 5px 10px; border-radius: 4px; text-decoration: none; color: white; margin-right: 5px; }
+    .btn-edit { background-color: #f39c12; }
+    .btn-toggle-on { background-color: #27ae60; }
+    .btn-toggle-off { background-color: #e74c3c; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🔧 Manage Menu Items</h1>
+      <div>
+        <%= link_to "Back to Menu", menu_index_path, class: "nav-link" %>
+        <%= link_to "➕ Add New Item", new_menu_path, class: "nav-link", style: "background: #27ae60;" %>
+      </div>
+    </div>
+
+    <table class="menu-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Available?</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @menu_items.each do |item| %>
+          <tr>
+            <td><strong><%= item.name %></strong></td>
+            <td><%= item.category.humanize %></td>
+            <td><%= item.formatted_price %></td>
+            <td><%= item.available? ? "Yes" : "No" %></td>
+            <td>
+              <%= link_to "Edit", edit_menu_path(item), class: "action-btn btn-edit" %>
+              <%= button_to (item.available? ? "Make Unavailable" : "Make Available"), toggle_availability_menu_path(item), method: :patch, class: "action-btn #{item.available? ? 'btn-toggle-off' : 'btn-toggle-on'}" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

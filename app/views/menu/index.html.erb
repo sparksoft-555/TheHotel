@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Menu - Hotel Management System</title>
-    <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <style>
       body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; }
       .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
@@ -18,38 +18,38 @@
       .item-price { font-size: 1.2em; font-weight: bold; color: #27ae60; }
       .item-details { font-size: 0.9em; color: #888; margin-top: 10px; }
       .featured { border: 2px solid #f39c12; background: #fef9e7; }
-      .featured::before { content: \"⭐ FEATURED\"; color: #f39c12; font-weight: bold; font-size: 0.8em; }
+      .featured::before { content: "⭐ FEATURED"; color: #f39c12; font-weight: bold; font-size: 0.8em; }
     </style>
   </head>
 
   <body>
-    <div class=\"container\">
-      <div class=\"header\">
+    <div class="container">
+      <div class="header">
         <h1>🍽️ Today's Menu</h1>
         <p><%= @daily_menu.formatted_date %></p>
         <% if @daily_menu.special_notes.present? %>
           <p><em><%= @daily_menu.special_notes %></em></p>
         <% end %>
         <div>
-          <a href=\"/\" class=\"nav-link\">Home</a>
-          <a href=\"/dashboard\" class=\"nav-link\">Dashboard</a>
-          <a href=\"/menu\" class=\"nav-link\">Menu</a>
-          <a href=\"/orders\" class=\"nav-link\">Orders</a>
-          <a href=\"/inventory\" class=\"nav-link\">Inventory</a>
-          <a href=\"/menu/manage\" class=\"nav-link\">Manage Menu</a>
+          <%= link_to "Home", root_path, class: "nav-link" %>
+          <%= link_to "Dashboard", dashboard_path, class: "nav-link" %>
+          <%= link_to "Menu", menu_index_path, class: "nav-link" %>
+          <%= link_to "Orders", orders_path, class: "nav-link" %>
+          <%= link_to "Inventory", inventory_index_path, class: "nav-link" %>
+          <%= link_to "Manage Menu", manage_menu_index_path, class: "nav-link" %>
         </div>
       </div>
 
       <% if @featured_items.any? %>
-        <div class=\"category-section\">
-          <h2 class=\"category-title\">⭐ Featured Items</h2>
-          <div class=\"menu-grid\">
+        <div class="category-section">
+          <h2 class="category-title">⭐ Featured Items</h2>
+          <div class="menu-grid">
             <% @featured_items.each do |item| %>
-              <div class=\"menu-item featured\">
-                <div class=\"item-name\"><%= item.name %></div>
-                <div class=\"item-description\"><%= item.description %></div>
-                <div class=\"item-price\"><%= item.formatted_price %></div>
-                <div class=\"item-details\">
+              <div class="menu-item featured">
+                <div class="item-name"><%= item.name %></div>
+                <div class="item-description"><%= item.description %></div>
+                <div class="item-price"><%= item.formatted_price %></div>
+                <div class="item-details">
                   <% if item.prep_time_minutes %>
                     🕐 <%= item.prep_time_minutes %> min | 
                   <% end %>
@@ -64,15 +64,15 @@
       <% end %>
 
       <% @menu_items_by_category.each do |category, items| %>
-        <div class=\"category-section\">
-          <h2 class=\"category-title\"><%= category.humanize.pluralize %></h2>
-          <div class=\"menu-grid\">
+        <div class="category-section">
+          <h2 class="category-title"><%= category.humanize.pluralize %></h2>
+          <div class="menu-grid">
             <% items.each do |item| %>
-              <div class=\"menu-item\">
-                <div class=\"item-name\"><%= item.name %></div>
-                <div class=\"item-description\"><%= item.description %></div>
-                <div class=\"item-price\"><%= item.formatted_price %></div>
-                <div class=\"item-details\">
+              <div class="menu-item">
+                <div class="item-name"><%= item.name %></div>
+                <div class="item-description"><%= item.description %></div>
+                <div class="item-price"><%= item.formatted_price %></div>
+                <div class="item-details">
                   <% if item.prep_time_minutes %>
                     🕐 <%= item.prep_time_minutes %> min | 
                   <% end %>
@@ -86,7 +86,7 @@
         </div>
       <% end %>
 
-      <div style=\"margin-top: 40px; text-align: center; padding: 20px; background: #ecf0f1; border-radius: 8px;\">
+      <div style="margin-top: 40px; text-align: center; padding: 20px; background: #ecf0f1; border-radius: 8px;">
         <h3>Order Information</h3>
         <p>📱 Scan the QR code at your table to place an order</p>
         <p>🍽️ Total menu items: <%= @daily_menu.total_items %></p>

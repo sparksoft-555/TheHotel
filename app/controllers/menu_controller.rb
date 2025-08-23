@@ -2,4 +2,59 @@ class MenuController < ApplicationController
   def index
     @daily_menu = DailyMenu.for_today
     @menu_items_by_category = @daily_menu.items_by_category
-    @featured_items = @daily_menu.menu_items.joins(:daily_menu_items).where(daily_menu_items: { featured: true })\n  end\n\n  def show\n    @menu_item = MenuItem.find(params[:id])\n  end\n\n  def manage\n    @menu_items = MenuItem.all.order(:category, :name)\n    @categories = MenuItem::CATEGORIES\n  end\n\n  def new\n    @menu_item = MenuItem.new\n    @categories = MenuItem::CATEGORIES\n  end\n\n  def create\n    @menu_item = MenuItem.new(menu_item_params)\n    \n    if @menu_item.save\n      redirect_to manage_menu_index_path, notice: 'Menu item created successfully!'\n    else\n      @categories = MenuItem::CATEGORIES\n      render :new\n    end\n  end\n\n  def edit\n    @menu_item = MenuItem.find(params[:id])\n    @categories = MenuItem::CATEGORIES\n  end\n\n  def update\n    @menu_item = MenuItem.find(params[:id])\n    \n    if @menu_item.update(menu_item_params)\n      redirect_to manage_menu_index_path, notice: 'Menu item updated successfully!'\n    else\n      @categories = MenuItem::CATEGORIES\n      render :edit\n    end\n  end\n\n  def toggle_availability\n    @menu_item = MenuItem.find(params[:id])\n    @menu_item.toggle_availability!\n    redirect_to manage_menu_index_path, notice: \"#{@menu_item.name} availability updated!\"\n  end\n\n  private\n\n  def menu_item_params\n    params.require(:menu_item).permit(:name, :description, :price, :category, :available, :ingredients, :dietary_info, :prep_time_minutes)\n  end\nend
+    @featured_items = @daily_menu.menu_items.joins(:daily_menu_items).where(daily_menu_items: { featured: true })
+  end
+
+  def show
+    @menu_item = MenuItem.find(params[:id])
+  end
+
+  def manage
+    @menu_items = MenuItem.all.order(:category, :name)
+    @categories = MenuItem::CATEGORIES
+  end
+
+  def new
+    @menu_item = MenuItem.new
+    @categories = MenuItem::CATEGORIES
+  end
+
+  def create
+    @menu_item = MenuItem.new(menu_item_params)
+
+    if @menu_item.save
+      redirect_to manage_menu_index_path, notice: "Menu item created successfully!"
+    else
+      @categories = MenuItem::CATEGORIES
+      render :new
+    end
+  end
+
+  def edit
+    @menu_item = MenuItem.find(params[:id])
+    @categories = MenuItem::CATEGORIES
+  end
+
+  def update
+    @menu_item = MenuItem.find(params[:id])
+
+    if @menu_item.update(menu_item_params)
+      redirect_to manage_menu_index_path, notice: "Menu item updated successfully!"
+    else
+      @categories = MenuItem::CATEGORIES
+      render :edit
+    end
+  end
+
+  def toggle_availability
+    @menu_item = MenuItem.find(params[:id])
+    @menu_item.toggle_availability!
+    redirect_to manage_menu_index_path, notice: "#{@menu_item.name} availability updated!"
+  end
+
+  private
+
+  def menu_item_params
+    params.require(:menu_item).permit(:name, :description, :price, :category, :available, :ingredients, :dietary_info, :prep_time_minutes)
+  end
+end

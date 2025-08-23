@@ -4,9 +4,9 @@ Rails.application.routes.draw do
   # Hotel Management System routes
   root "home#index"
   get "dashboard", to: "home#dashboard"
-  
+
   # Menu management
-  resources :menu, only: [:index, :show] do
+  resources :menu, only: [ :index, :show ] do
     collection do
       get :manage
       get :new
@@ -18,7 +18,7 @@ Rails.application.routes.draw do
       patch :toggle_availability
     end
   end
-  
+
   # Order management
   resources :orders do
     member do
@@ -29,7 +29,7 @@ Rails.application.routes.draw do
       get :kitchen
     end
   end
-  
+
   # Inventory management
   resources :inventory do
     member do
@@ -39,12 +39,12 @@ Rails.application.routes.draw do
       get :alerts
     end
   end
-  
+
   # Employee management
-  resources :work_logs, only: [:index, :show, :create, :update]
-  
+  resources :work_logs, only: [ :index, :show, :create, :update ]
+
   # Bills and accounting
-  resources :bills, only: [:index, :show, :update]
+  resources :bills, only: [ :index, :show, :update ]
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

@@ -9,10 +9,10 @@ class CreateMenuItems < ActiveRecord::Migration[7.0]
       t.text :ingredients
       t.string :dietary_info # vegetarian, vegan, gluten-free, etc.
       t.integer :prep_time_minutes
-      
+
       t.timestamps
     end
-    
+
     add_index :menu_items, :category
     add_index :menu_items, :available
   end

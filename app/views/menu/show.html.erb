@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= @menu_item.name %> - Hotel Management System</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; }
+    .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .header { text-align: center; color: #333; margin-bottom: 30px; }
+    .nav-link { display: inline-block; margin: 10px; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 5px; }
+    .nav-link:hover { background: #2980b9; }
+    .item-details { border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px; }
+    .detail-row { display: flex; padding: 10px 0; border-bottom: 1px solid #eee; }
+    .detail-label { font-weight: bold; color: #555; width: 200px; }
+    .availability-on { color: #27ae60; font-weight: bold; }
+    .availability-off { color: #e74c3c; font-weight: bold; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><%= @menu_item.name %></h1>
+      <p style="font-size: 1.2em; color: #27ae60; font-weight: bold;"><%= @menu_item.formatted_price %></p>
+      <div>
+        <%= link_to "Back to Menu", menu_index_path, class: "nav-link" %>
+        <%= link_to "Manage Menu", manage_menu_index_path, class: "nav-link" %>
+        <%= link_to "Edit Item", edit_menu_path(@menu_item), class: "nav-link", style: "background: #f39c12;" %>
+      </div>
+    </div>
+
+    <div class="item-details">
+      <div class="detail-row">
+        <div class="detail-label">Description</div>
+        <div><%= @menu_item.description %></div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">Category</div>
+        <div><%= @menu_item.category.humanize %></div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">Availability</div>
+        <div class="<%= @menu_item.available? ? 'availability-on' : 'availability-off' %>">
+          <%= @menu_item.available? ? "Currently Available" : "Not Available" %>
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">Ingredients</div>
+        <div><%= @menu_item.ingredients.present? ? @menu_item.ingredients : "Not specified" %></div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">Dietary Information</div>
+        <div><%= @menu_item.dietary_info.present? ? @menu_item.dietary_info : "Not specified" %></div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">Preparation Time</div>
+        <div><%= @menu_item.prep_time_minutes ? "#{@menu_item.prep_time_minutes} minutes" : "Not specified" %></div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

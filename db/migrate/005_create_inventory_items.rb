@@ -10,10 +10,10 @@ class CreateInventoryItems < ActiveRecord::Migration[7.0]
       t.decimal :cost_per_unit, precision: 8, scale: 2
       t.string :supplier
       t.text :notes
-      
+
       t.timestamps
     end
-    
+
     add_index :inventory_items, :category
     add_index :inventory_items, :expiry_date
     add_index :inventory_items, :name

@@ -7,11 +7,10 @@ class CreateWorkLogs < ActiveRecord::Migration[7.0]
       t.boolean :approved, default: false
       t.text :notes
       t.decimal :break_duration, precision: 4, scale: 2, default: 0
-      
+
       t.timestamps
     end
-    
-    add_index :work_logs, :employee_id
+
     add_index :work_logs, :clock_in
     add_index :work_logs, :approved
   end

@@ -9,12 +9,11 @@ class CreateBills < ActiveRecord::Migration[7.0]
       t.text :notes
       t.decimal :tip_amount, precision: 8, scale: 2, default: 0
       t.decimal :discount_amount, precision: 8, scale: 2, default: 0
-      
+
       t.timestamps
     end
-    
+
     add_index :bills, :payment_status
     add_index :bills, :paid_at
-    add_index :bills, :order_id, unique: true
   end
 end

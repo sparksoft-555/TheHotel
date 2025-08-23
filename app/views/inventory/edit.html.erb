@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit <%= @inventory_item.name %> - Hotel Management System</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; }
+    .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .header { text-align: center; color: #333; margin-bottom: 30px; }
+    .nav-link { display: inline-block; margin: 10px; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 5px; }
+    .nav-link:hover { background: #2980b9; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+    .form-actions { text-align: center; margin-top: 20px; }
+    .btn { padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; }
+    .btn-primary { background-color: #27ae60; color: white; }
+    .btn-primary:hover { background-color: #219a52; }
+    .error-messages { color: #c0392b; background: #f9e0e0; border: 1px solid #e74c3c; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>✏️ Edit <%= @inventory_item.name %></h1>
+      <div>
+        <%= link_to "Back to Inventory", inventory_index_path, class: "nav-link" %>
+        <%= link_to "View Item", inventory_path(@inventory_item), class: "nav-link" %>
+      </div>
+    </div>
+
+    <% if @inventory_item.errors.any? %>
+      <div class="error-messages">
+        <h2><%= pluralize(@inventory_item.errors.count, "error") %> prohibited this item from being saved:</h2>
+        <ul>
+          <% @inventory_item.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form_with(model: @inventory_item, url: inventory_path(@inventory_item), method: :patch) do |form| %>
+      <div class="form-group">
+        <%= form.label :name %>
+        <%= form.text_field :name, required: true %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :category %>
+        <%= form.select :category, @categories, { prompt: 'Select a Category' }, required: true %>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="form-group">
+          <%= form.label :quantity %>
+          <%= form.number_field :quantity, required: true, step: 'any' %>
+        </div>
+        <div class="form-group">
+          <%= form.label :unit %>
+          <%= form.select :unit, @units, { prompt: 'Select a Unit' }, required: true %>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="form-group">
+          <%= form.label :minimum_quantity, 'Minimum Stock Level' %>
+          <%= form.number_field :minimum_quantity, step: 'any' %>
+        </div>
+        <div class="form-group">
+          <%= form.label :expiry_date %>
+          <%= form.date_field :expiry_date %>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="form-group">
+          <%= form.label :cost_per_unit %>
+          <%= form.number_field :cost_per_unit, step: 'any' %>
+        </div>
+        <div class="form-group">
+          <%= form.label :supplier %>
+          <%= form.text_field :supplier %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :notes %>
+        <%= form.text_area :notes, rows: 4 %>
+      </div>
+
+      <div class="form-actions">
+        <%= form.submit "Update Item", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</body>
+</html>

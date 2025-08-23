@@ -18,9 +18,9 @@ class InventoryController < ApplicationController
 
   def create
     @inventory_item = InventoryItem.new(inventory_item_params)
-    
+
     if @inventory_item.save
-      redirect_to inventory_index_path, notice: 'Inventory item created successfully!'
+      redirect_to inventory_index_path, notice: "Inventory item created successfully!"
     else
       @categories = InventoryItem::CATEGORIES
       @units = InventoryItem::UNITS
@@ -36,9 +36,9 @@ class InventoryController < ApplicationController
 
   def update
     @inventory_item = InventoryItem.find(params[:id])
-    
+
     if @inventory_item.update(inventory_item_params)
-      redirect_to inventory_index_path, notice: 'Inventory item updated successfully!'
+      redirect_to inventory_index_path, notice: "Inventory item updated successfully!"
     else
       @categories = InventoryItem::CATEGORIES
       @units = InventoryItem::UNITS
@@ -49,17 +49,17 @@ class InventoryController < ApplicationController
   def update_stock
     @inventory_item = InventoryItem.find(params[:id])
     change = params[:stock_change].to_f
-    
+
     @inventory_item.update_stock!(change)
-    redirect_to inventory_index_path, notice: \"Stock updated for #{@inventory_item.name}!\"
+    redirect_to inventory_index_path, notice: "Stock updated for #{@inventory_item.name}!"
   rescue => e
-    redirect_to inventory_index_path, alert: \"Error updating stock: #{e.message}\"
+    redirect_to inventory_index_path, alert: "Error updating stock: #{e.message}"
   end
 
   def alerts
     @low_stock_items = InventoryItem.low_stock.order(:name)
     @expiring_items = InventoryItem.expiring_soon.order(:expiry_date)
-    @expired_items = InventoryItem.where('expiry_date < ?', Date.current).order(:expiry_date)
+    @expired_items = InventoryItem.where("expiry_date < ?", Date.current).order(:expiry_date)
   end
 
   private

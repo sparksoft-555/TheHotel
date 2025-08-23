@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>New Menu Item - Hotel Management System</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; }
+    .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .header { text-align: center; color: #333; margin-bottom: 30px; }
+    .nav-link { display: inline-block; margin: 10px; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 5px; }
+    .nav-link:hover { background: #2980b9; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+    .form-actions { text-align: center; margin-top: 20px; }
+    .btn { padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; }
+    .btn-primary { background-color: #27ae60; color: white; }
+    .btn-primary:hover { background-color: #219a52; }
+    .error-messages { color: #c0392b; background: #f9e0e0; border: 1px solid #e74c3c; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>➕ Add New Menu Item</h1>
+      <div>
+        <%= link_to "Back to Manage Menu", manage_menu_index_path, class: "nav-link" %>
+      </div>
+    </div>
+
+    <% if @menu_item.errors.any? %>
+      <div class="error-messages">
+        <h2><%= pluralize(@menu_item.errors.count, "error") %> prohibited this item from being saved:</h2>
+        <ul>
+          <% @menu_item.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form_with(model: @menu_item, url: create_menu_index_path, method: :post) do |form| %>
+      <div class="form-group">
+        <%= form.label :name %>
+        <%= form.text_field :name, required: true %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :description %>
+        <%= form.text_area :description, rows: 4 %>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="form-group">
+          <%= form.label :price %>
+          <%= form.number_field :price, required: true, step: '0.01' %>
+        </div>
+        <div class="form-group">
+          <%= form.label :category %>
+          <%= form.select :category, @categories, { prompt: 'Select a Category' }, required: true %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :ingredients %>
+        <%= form.text_field :ingredients, placeholder: "e.g., Flour, Sugar, Eggs" %>
+        <small>Comma-separated list of ingredients.</small>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="form-group">
+          <%= form.label :dietary_info, "Dietary Information" %>
+          <%= form.text_field :dietary_info, placeholder: "e.g., Gluten-free, Vegan" %>
+        </div>
+        <div class="form-group">
+          <%= form.label :prep_time_minutes, "Preparation Time (minutes)" %>
+          <%= form.number_field :prep_time_minutes %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= form.check_box :available %>
+        <%= form.label :available, "Item is currently available" %>
+      </div>
+
+      <div class="form-actions">
+        <%= form.submit "Create Menu Item", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</body>
+</html>

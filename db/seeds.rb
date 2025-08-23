@@ -2,10 +2,10 @@
 
 begin
   puts "🏨 Seeding Hotel Management System data..."
-  
+
   # Create users with different roles
   puts "👥 Creating users..."
-  
+
   # Manager
   manager = User.create!(
     name: "John Manager",
@@ -14,7 +14,7 @@ begin
     role: "manager",
     phone: "555-0101"
   )
-  
+
   # Chef
   chef = User.create!(
     name: "Maria Chef",
@@ -23,7 +23,7 @@ begin
     role: "chef",
     phone: "555-0102"
   )
-  
+
   # Cashier
   cashier = User.create!(
     name: "David Cashier",
@@ -32,7 +32,7 @@ begin
     role: "cashier",
     phone: "555-0103"
   )
-  
+
   # Accountant
   accountant = User.create!(
     name: "Sarah Accountant",
@@ -41,7 +41,7 @@ begin
     role: "accountant",
     phone: "555-0104"
   )
-  
+
   # Sample customers
   customer1 = User.create!(
     name: "Alice Customer",
@@ -50,7 +50,7 @@ begin
     role: "customer",
     phone: "555-0201"
   )
-  
+
   customer2 = User.create!(
     name: "Bob Customer",
     email: "bob@example.com",
@@ -58,12 +58,12 @@ begin
     role: "customer",
     phone: "555-0202"
   )
-  
+
   puts "✓ Created #{User.count} users"
-  
+
   # Create menu items
   puts "🍽️ Creating menu items..."
-  
+
   # Appetizers
   appetizers = [
     { name: "Garlic Bread", description: "Crispy bread with garlic butter and herbs", price: 8.99, category: "appetizer", prep_time_minutes: 10 },
@@ -71,7 +71,7 @@ begin
     { name: "Chicken Wings", description: "Spicy buffalo wings with blue cheese dip", price: 14.99, category: "appetizer", prep_time_minutes: 20 },
     { name: "Mozzarella Sticks", description: "Crispy breaded mozzarella with marinara sauce", price: 10.99, category: "appetizer", prep_time_minutes: 12 }
   ]
-  
+
   # Main courses
   main_courses = [
     { name: "Grilled Salmon", description: "Fresh Atlantic salmon with lemon and herbs", price: 24.99, category: "main_course", prep_time_minutes: 25 },
@@ -80,14 +80,14 @@ begin
     { name: "Vegetarian Pasta", description: "Penne pasta with seasonal vegetables and olive oil", price: 16.99, category: "main_course", prep_time_minutes: 20 },
     { name: "Fish and Chips", description: "Beer-battered cod with crispy fries", price: 18.99, category: "main_course", prep_time_minutes: 22 }
   ]
-  
+
   # Desserts
   desserts = [
     { name: "Chocolate Cake", description: "Rich chocolate layer cake with vanilla ice cream", price: 8.99, category: "dessert", prep_time_minutes: 5 },
     { name: "Tiramisu", description: "Classic Italian dessert with coffee and mascarpone", price: 9.99, category: "dessert", prep_time_minutes: 5 },
     { name: "Cheesecake", description: "New York style cheesecake with berry compote", price: 8.99, category: "dessert", prep_time_minutes: 5 }
   ]
-  
+
   # Beverages
   beverages = [
     { name: "Coffee", description: "Freshly brewed house blend", price: 3.99, category: "beverage", prep_time_minutes: 3 },
@@ -95,22 +95,22 @@ begin
     { name: "Iced Tea", description: "Sweet or unsweetened iced tea", price: 2.99, category: "beverage", prep_time_minutes: 2 },
     { name: "Soda", description: "Coke, Pepsi, Sprite, or other soft drinks", price: 2.99, category: "beverage", prep_time_minutes: 1 }
   ]
-  
+
   all_menu_items = appetizers + main_courses + desserts + beverages
-  
+
   all_menu_items.each do |item_data|
     MenuItem.create!(item_data)
   end
-  
+
   puts "✓ Created #{MenuItem.count} menu items"
-  
+
   # Create daily menu for today
   puts "📅 Creating today's menu..."
   today_menu = DailyMenu.create!(
     menu_date: Date.current,
     special_notes: "Welcome to our daily specials!"
   )
-  
+
   # Add all menu items to today's menu
   MenuItem.all.each_with_index do |item, index|
     DailyMenuItem.create!(
@@ -120,12 +120,12 @@ begin
       display_order: index + 1
     )
   end
-  
+
   puts "✓ Created daily menu with #{today_menu.menu_items.count} items"
-  
+
   # Create inventory items
   puts "📦 Creating inventory items..."
-  
+
   inventory_data = [
     { name: "Chicken Breast", quantity: 25, unit: "kg", category: "meat", minimum_quantity: 5, cost_per_unit: 8.50, expiry_date: 5.days.from_now },
     { name: "Salmon Fillet", quantity: 15, unit: "kg", category: "meat", minimum_quantity: 3, cost_per_unit: 12.00, expiry_date: 3.days.from_now },
@@ -136,16 +136,16 @@ begin
     { name: "Pasta", quantity: 30, unit: "kg", category: "grains", minimum_quantity: 5, cost_per_unit: 2.00, expiry_date: 365.days.from_now },
     { name: "Coffee Beans", quantity: 10, unit: "kg", category: "beverages", minimum_quantity: 2, cost_per_unit: 15.00, expiry_date: 90.days.from_now }
   ]
-  
+
   inventory_data.each do |item_data|
     InventoryItem.create!(item_data)
   end
-  
+
   puts "✓ Created #{InventoryItem.count} inventory items"
-  
+
   # Create sample orders
   puts "📋 Creating sample orders..."
-  
+
   # Order 1 - completed order
   order1 = Order.create!(
     customer: customer1,
@@ -153,21 +153,21 @@ begin
     status: "delivered",
     special_instructions: "No onions please"
   )
-  
+
   OrderItem.create!(
     order: order1,
     menu_item: MenuItem.find_by(name: "Caesar Salad"),
     quantity: 1,
     price_at_time: 12.99
   )
-  
+
   OrderItem.create!(
     order: order1,
     menu_item: MenuItem.find_by(name: "Grilled Salmon"),
     quantity: 1,
     price_at_time: 24.99
   )
-  
+
   # Create bill for order1
   Bill.create!(
     order: order1,
@@ -176,7 +176,7 @@ begin
     payment_method: "credit_card",
     paid_at: 2.hours.ago
   )
-  
+
   # Order 2 - active order
   order2 = Order.create!(
     customer: customer2,
@@ -184,53 +184,53 @@ begin
     status: "preparing",
     special_instructions: "Medium rare steak"
   )
-  
+
   OrderItem.create!(
     order: order2,
     menu_item: MenuItem.find_by(name: "Beef Ribeye Steak"),
     quantity: 1,
     price_at_time: 32.99
   )
-  
+
   OrderItem.create!(
     order: order2,
     menu_item: MenuItem.find_by(name: "Coffee"),
     quantity: 2,
     price_at_time: 3.99
   )
-  
+
   # Create pending bill for order2
   Bill.create!(
     order: order2,
     total_amount: order2.total_amount,
     payment_status: "pending"
   )
-  
+
   # Order 3 - ready for delivery
   order3 = Order.create!(
     table_number: "T-005",
     status: "ready"
   )
-  
+
   OrderItem.create!(
     order: order3,
     menu_item: MenuItem.find_by(name: "Chicken Parmesan"),
     quantity: 2,
     price_at_time: 19.99
   )
-  
+
   Bill.create!(
     order: order3,
     total_amount: order3.total_amount,
     payment_status: "pending"
   )
-  
+
   puts "✓ Created #{Order.count} orders with #{OrderItem.count} items"
   puts "✓ Created #{Bill.count} bills"
-  
+
   # Create work logs
   puts "⏰ Creating work logs..."
-  
+
   # Chef's work log for today
   WorkLog.create!(
     employee: chef,
@@ -239,7 +239,7 @@ begin
     approved: true,
     notes: "Kitchen prep and lunch service"
   )
-  
+
   # Cashier's ongoing work
   WorkLog.create!(
     employee: cashier,
@@ -247,9 +247,9 @@ begin
     approved: false,
     notes: "Front desk service"
   )
-  
+
   puts "✓ Created #{WorkLog.count} work logs"
-  
+
   puts "\n🎉 Hotel Management System seeding completed successfully!"
   puts "\n📊 Summary:"
   puts "   👥 Users: #{User.count} (#{User.employees.count} employees, #{User.customers.count} customers)"
@@ -264,7 +264,7 @@ begin
   puts "   Chef: chef@hotel.com / password123"
   puts "   Cashier: cashier@hotel.com / password123"
   puts "   Accountant: accountant@hotel.com / password123"
-  
+
 rescue => e
   puts "❌ Error during seeding: #{e.message}"
   puts e.backtrace.first(5).join("\n")
