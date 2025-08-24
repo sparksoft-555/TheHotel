@@ -2,55 +2,79 @@ class Bill < ApplicationRecord
   belongs_to :order
 
   validates :total_amount, presence: true, numericality: { greater_than: 0 }
-  validates :payment_status, inclusion: { in: %w[pending paid cancelled] }
+  validates :status, inclusion: { in: %w[pending paid cancelled] }
 
-  PAYMENT_STATUSES = %w[pending paid cancelled].freeze
-  PAYMENT_METHODS = %w[cash credit_card debit_card mobile_payment].freeze
+  STATUSES = %w[pending paid cancelled].freeze
+  PAYMENT_METHODS = %w[cash credit_card debit_card mobile_payment upi].freeze
 
   validates :payment_method, inclusion: { in: PAYMENT_METHODS }, allow_blank: true
 
-  scope :pending, -> { where(payment_status: "pending") }
-  scope :paid, -> { where(payment_status: "paid") }
+  scope :pending, -> { where(status: "pending") }
+  scope :paid, -> { where(status: "paid") }
   scope :for_date, ->(date) { where(created_at: date.beginning_of_day..date.end_of_day) }
+  scope :todays_revenue, -> { paid.where(paid_at: Date.current.all_day) }
 
-  def mark_as_paid!(method = "cash")
+  def mark_as_paid!(method = "cash", amount_received = nil)
     update!(
-      payment_status: "paid",
+      status: "paid",
       payment_method: method,
-      paid_at: Time.current
+      paid_at: Time.current,
+      amount_received: amount_received || final_amount,
+      change_amount: amount_received ? [amount_received - final_amount, 0].max : 0
     )
   end
 
   def cancel!
-    update!(payment_status: "cancelled")
+    update!(status: "cancelled")
   end
 
   def pending?
-    payment_status == "pending"
+    status == "pending"
   end
 
   def paid?
-    payment_status == "paid"
+    status == "paid"
   end
 
   def cancelled?
-    payment_status == "cancelled"
+    status == "cancelled"
   end
 
   def formatted_total
     "$#{total_amount.to_f.round(2)}"
   end
 
+  def formatted_final_amount
+    "$#{final_amount.to_f.round(2)}"
+  end
+
   def payment_method_display
     payment_method&.humanize || "Not specified"
   end
 
-  # Calculate tax (assuming 8.5% tax rate)
-  def tax_amount
-    (total_amount * 0.085).round(2)
+  # Tax and service charge calculations
+  def calculate_tax_amount
+    (total_amount * 0.10).round(2) # 10% tax
   end
 
-  def subtotal
-    (total_amount / 1.085).round(2)
+  def calculate_service_charge
+    (total_amount * 0.05).round(2) # 5% service charge
+  end
+
+  def calculate_final_amount
+    total_amount + calculate_tax_amount + calculate_service_charge
+  end
+
+  # Auto-calculate if not set
+  def tax_amount
+    super || calculate_tax_amount
+  end
+
+  def service_charge
+    super || calculate_service_charge
+  end
+
+  def final_amount
+    super || calculate_final_amount
   end
 end

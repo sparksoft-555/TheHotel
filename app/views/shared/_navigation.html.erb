@@ -1,0 +1,175 @@
+<nav class=\"role-navigation\">
+  <div class=\"nav-container\">
+    <div class=\"nav-brand\">
+      <%= link_to \"🏨 Hotel Management\", root_path, class: \"brand-link\" %>
+    </div>
+    
+    <% if user_signed_in? %>
+      <div class=\"nav-user\">
+        <span class=\"user-info\">
+          <span class=\"user-name\"><%= current_user.name %></span>
+          <span class=\"user-role\"><%= current_user.role.humanize %></span>
+        </span>
+        
+        <div class=\"nav-menu\">
+          <% case current_user.role %>
+          <% when 'admin' %>
+            <%= link_to \"📊 Dashboard\", admin_dashboard_path, class: \"nav-link\" %>
+            <%= link_to \"👥 Users\", admin_users_path, class: \"nav-link\" %>
+            <%= link_to \"📈 Analytics\", admin_analytics_path, class: \"nav-link\" %>
+            
+          <% when 'manager' %>
+            <%= link_to \"📊 Dashboard\", manager_dashboard_path, class: \"nav-link\" %>
+            <%= link_to \"📦 Inventory\", manager_inventory_path, class: \"nav-link\" %>
+            <%= link_to \"🍽️ Menu\", manager_menu_management_path, class: \"nav-link\" %>
+            <%= link_to \"📋 Reports\", manager_reports_path, class: \"nav-link\" %>
+            
+          <% when 'chef' %>
+            <%= link_to \"🍳 Kitchen\", kitchen_dashboard_path, class: \"nav-link\" %>
+            <%= link_to \"📝 Orders\", kitchen_orders_path, class: \"nav-link\" %>
+            <%= link_to \"⏱️ Prep Times\", kitchen_prep_times_path, class: \"nav-link\" %>
+            
+          <% when 'cashier' %>
+            <%= link_to \"💰 Dashboard\", cashier_dashboard_path, class: \"nav-link\" %>
+            <%= link_to \"🧾 Billing\", cashier_billing_path, class: \"nav-link\" %>
+            <%= link_to \"📊 Daily Report\", cashier_daily_report_path, class: \"nav-link\" %>
+            <%= link_to \"📋 Transactions\", cashier_transactions_path, class: \"nav-link\" %>
+            
+          <% when 'accountant' %>
+            <%= link_to \"📊 Dashboard\", accountant_dashboard_path, class: \"nav-link\" %>
+            <%= link_to \"💵 Revenue\", accountant_revenue_reports_path, class: \"nav-link\" %>
+            <%= link_to \"💸 Expenses\", accountant_expense_reports_path, class: \"nav-link\" %>
+            <%= link_to \"📈 P&L\", accountant_profit_loss_path, class: \"nav-link\" %>
+            
+          <% when 'customer' %>
+            <%= link_to \"🍽️ Menu\", menu_index_path, class: \"nav-link\" %>
+            <%= link_to \"📝 My Orders\", orders_path, class: \"nav-link\" %>
+            <%= link_to \"➕ New Order\", new_order_path, class: \"nav-link\" %>
+          <% end %>
+          
+          <!-- Common links for all roles -->
+          <%= link_to \"🚪 Logout\", destroy_user_session_path, method: :delete, class: \"nav-link logout\" %>
+        </div>
+      </div>
+    <% else %>
+      <div class=\"nav-auth\">
+        <%= link_to \"Login\", new_user_session_path, class: \"nav-link\" %>
+        <%= link_to \"Sign Up\", new_user_registration_path, class: \"nav-link\" %>
+      </div>
+    <% end %>
+  </div>
+</nav>
+
+<style>
+.role-navigation {
+  background: #343a40;
+  color: white;
+  padding: 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.brand-link {
+  color: white;
+  text-decoration: none;
+  font-size: 1.5em;
+  font-weight: bold;
+  padding: 15px 0;
+}
+
+.brand-link:hover {
+  color: #ffc107;
+  text-decoration: none;
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.user-name {
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+.user-role {
+  font-size: 0.75em;
+  color: #ffc107;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.nav-link {
+  color: #dee2e6;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+}
+
+.nav-link.logout {
+  color: #ffc107;
+  border: 1px solid #ffc107;
+}
+
+.nav-link.logout:hover {
+  background: #ffc107;
+  color: #343a40;
+}
+
+.nav-auth {
+  display: flex;
+  gap: 10px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+  
+  .nav-user {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .nav-menu {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .user-info {
+    align-items: center;
+  }
+}
+</style>

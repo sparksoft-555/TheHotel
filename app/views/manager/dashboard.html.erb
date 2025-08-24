@@ -1,0 +1,281 @@
+<% content_for :title, \"Manager Dashboard\" %>
+
+<div class=\"manager-dashboard\">
+  <div class=\"dashboard-header\">
+    <h1>Manager Dashboard</h1>
+    <p class=\"subtitle\">AI-powered restaurant management insights</p>
+  </div>
+
+  <!-- Inventory Status Overview -->
+  <div class=\"inventory-overview\">
+    <h2>📦 Inventory Status</h2>
+    <div class=\"inventory-stats\">
+      <div class=\"stat-item\">
+        <span class=\"stat-label\">Total Items:</span>
+        <span class=\"stat-value\"><%= @inventory_status[:total_items] %></span>
+      </div>
+      <div class=\"stat-item\">
+        <span class=\"stat-label\">Low Stock:</span>
+        <span class=\"stat-value alert\"><%= @inventory_status[:low_stock] %></span>
+      </div>
+      <div class=\"stat-item\">
+        <span class=\"stat-label\">Expiring Soon:</span>
+        <span class=\"stat-value warning\"><%= @inventory_status[:expiring_soon] %></span>
+      </div>
+      <div class=\"stat-item\">
+        <span class=\"stat-label\">Total Value:</span>
+        <span class=\"stat-value\">$<%= @inventory_status[:total_value].round(2) %></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Menu Suggestions -->
+  <div class=\"ai-suggestions\">
+    <h2>🤖 AI Menu Recommendations</h2>
+    <p class=\"ai-description\">Smart suggestions based on inventory, popularity, and efficiency</p>
+    
+    <% if @menu_suggestions.any? %>
+      <div class=\"suggestions-grid\">
+        <% @menu_suggestions.each do |suggestion| %>
+          <div class=\"suggestion-card priority-<%= suggestion[:priority] %>\">
+            <div class=\"suggestion-header\">
+              <h3><%= suggestion[:item] %></h3>
+              <span class=\"priority-badge\"><%= suggestion[:priority].upcase %></span>
+            </div>
+            <p class=\"suggestion-reason\"><%= suggestion[:reason] %></p>
+            <div class=\"suggestion-type\">
+              <% if suggestion[:type] == 'waste_reduction' %>
+                ♻️ Waste Reduction
+              <% elsif suggestion[:type] == 'revenue_boost' %>
+                💰 Revenue Boost
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class=\"no-suggestions\">No specific suggestions at the moment. All systems running smoothly!</p>
+    <% end %>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class=\"quick-stats\">
+    <div class=\"stat-card\">
+      <h3>Today's Revenue</h3>
+      <p class=\"big-number\">$<%= @daily_revenue.round(2) %></p>
+    </div>
+    <div class=\"stat-card\">
+      <h3>Popular Items</h3>
+      <ul class=\"popular-list\">
+        <% @popular_items.first(3).each do |item_name, quantity| %>
+          <li><%= item_name %> (<%= quantity %> sold)</li>
+        <% end %>
+      </ul>
+    </div>
+    <div class=\"stat-card\">
+      <h3>Expiring Soon</h3>
+      <% if @expiring_items.any? %>
+        <ul class=\"expiring-list\">
+          <% @expiring_items.each do |item| %>
+            <li><%= item.name %> - <%= item.expiry_date.strftime('%b %d') %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No items expiring soon</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Weather-Based Suggestion -->
+  <div class=\"weather-suggestion\">
+    <h2>🌤️ Weather-Based Recommendation</h2>
+    <div class=\"weather-card\">
+      <p><strong>Today:</strong> <%= @weather_info[:condition].humanize %>, <%= @weather_info[:temperature] %>°C</p>
+      <p class=\"weather-tip\"><%= @weather_info[:suggestion] %></p>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class=\"manager-actions\">
+    <h2>Quick Actions</h2>
+    <div class=\"action-grid\">
+      <%= link_to \"📋 Manage Inventory\", manager_inventory_path, class: \"action-btn\" %>
+      <%= link_to \"🍽️ Menu Management\", manager_menu_management_path, class: \"action-btn\" %>
+      <%= link_to \"📊 View Reports\", manager_reports_path, class: \"action-btn\" %>
+      <%= link_to \"👥 Staff Management\", \"#\", class: \"action-btn\" %>
+    </div>
+  </div>
+</div>
+
+<style>
+.manager-dashboard {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.inventory-overview {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.inventory-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: white;
+  border-radius: 5px;
+}
+
+.stat-value.alert { color: #dc3545; font-weight: bold; }
+.stat-value.warning { color: #fd7e14; font-weight: bold; }
+
+.ai-suggestions {
+  margin-bottom: 30px;
+}
+
+.ai-description {
+  color: #6c757d;
+  margin-bottom: 20px;
+}
+
+.suggestions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.suggestion-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-left: 4px solid #007bff;
+}
+
+.suggestion-card.priority-high {
+  border-left-color: #dc3545;
+}
+
+.suggestion-card.priority-medium {
+  border-left-color: #fd7e14;
+}
+
+.suggestion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.priority-badge {
+  font-size: 0.75em;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: #e9ecef;
+  color: #495057;
+}
+
+.suggestion-reason {
+  color: #6c757d;
+  margin-bottom: 10px;
+}
+
+.suggestion-type {
+  font-size: 0.875em;
+  font-weight: 500;
+}
+
+.quick-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.big-number {
+  font-size: 2em;
+  font-weight: bold;
+  color: #28a745;
+  margin: 10px 0;
+}
+
+.popular-list, .expiring-list {
+  list-style: none;
+  padding: 0;
+}
+
+.popular-list li, .expiring-list li {
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.weather-suggestion {
+  margin-bottom: 30px;
+}
+
+.weather-card {
+  background: linear-gradient(135deg, #74b9ff, #0984e3);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.weather-tip {
+  font-style: italic;
+  margin-top: 10px;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.action-btn {
+  display: block;
+  padding: 15px;
+  background: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.action-btn:hover {
+  background: #0056b3;
+  color: white;
+  text-decoration: none;
+}
+
+.no-suggestions {
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+  padding: 20px;
+}
+</style>

@@ -1,0 +1,176 @@
+<% content_for :title, \"Admin Dashboard\" %>
+
+<div class=\"admin-dashboard\">
+  <div class=\"dashboard-header\">
+    <h1>Admin Dashboard</h1>
+    <p class=\"subtitle\">Complete system overview and management</p>
+  </div>
+
+  <!-- Key Metrics -->
+  <div class=\"metrics-grid\">
+    <div class=\"metric-card\">
+      <h3>Today's Orders</h3>
+      <p class=\"metric-value\"><%= @total_orders_today %></p>
+    </div>
+    <div class=\"metric-card\">
+      <h3>Today's Revenue</h3>
+      <p class=\"metric-value\">$<%= @total_revenue_today.round(2) %></p>
+    </div>
+    <div class=\"metric-card\">
+      <h3>Active Orders</h3>
+      <p class=\"metric-value\"><%= @active_orders %></p>
+    </div>
+    <div class=\"metric-card\">
+      <h3>Low Stock Items</h3>
+      <p class=\"metric-value\"><%= @low_inventory_items.count %></p>
+    </div>
+  </div>
+
+  <!-- Recent Orders -->
+  <div class=\"recent-orders\">
+    <h2>Recent Orders</h2>
+    <div class=\"table-container\">
+      <table class=\"orders-table\">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Table</th>
+            <th>Customer</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @recent_orders.each do |order| %>
+            <tr>
+              <td>#<%= order.id %></td>
+              <td><%= order.table_number %></td>
+              <td><%= order.customer&.name || 'Walk-in' %></td>
+              <td><span class=\"status-badge status-<%= order.status %>\"><%= order.status.humanize %></span></td>
+              <td><%= order.formatted_total %></td>
+              <td><%= time_ago_in_words(order.created_at) %> ago</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Low Inventory Alert -->
+  <% if @low_inventory_items.any? %>
+    <div class=\"inventory-alert\">
+      <h2>⚠️ Low Inventory Alert</h2>
+      <div class=\"alert-items\">
+        <% @low_inventory_items.each do |item| %>
+          <div class=\"alert-item\">
+            <strong><%= item.name %></strong>: <%= item.quantity %> remaining (min: <%= item.minimum_quantity %>)
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Quick Actions -->
+  <div class=\"quick-actions\">
+    <h2>Quick Actions</h2>
+    <div class=\"action-buttons\">
+      <%= link_to \"Manage Users\", admin_users_path, class: \"btn btn-primary\" %>
+      <%= link_to \"View Analytics\", admin_analytics_path, class: \"btn btn-secondary\" %>
+      <%= link_to \"System Settings\", \"#\", class: \"btn btn-secondary\" %>
+      <%= link_to \"Backup Data\", \"#\", class: \"btn btn-warning\" %>
+    </div>
+  </div>
+</div>
+
+<style>
+.admin-dashboard {
+  padding: 20px;
+}
+
+.dashboard-header {
+  margin-bottom: 30px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.metric-card {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #dee2e6;
+}
+
+.metric-value {
+  font-size: 2em;
+  font-weight: bold;
+  color: #007bff;
+  margin: 10px 0;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin: 20px 0;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.875em;
+  font-weight: 500;
+}
+
+.status-received { background: #fff3cd; color: #856404; }
+.status-preparing { background: #d4edda; color: #155724; }
+.status-ready { background: #cce5ff; color: #004085; }
+.status-delivered { background: #d1ecf1; color: #0c5460; }
+
+.inventory-alert {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.alert-item {
+  margin: 10px 0;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-primary { background: #007bff; color: white; }
+.btn-secondary { background: #6c757d; color: white; }
+.btn-warning { background: #ffc107; color: #212529; }
+</style>

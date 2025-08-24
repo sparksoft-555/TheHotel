@@ -15,6 +15,7 @@ class Order < ApplicationRecord
   scope :active, -> { where.not(status: [ "delivered", "cancelled" ]) }
   scope :for_kitchen, -> { where(status: [ "received", "preparing" ]) }
   scope :ready_for_delivery, -> { where(status: "ready") }
+  scope :todays_orders, -> { where(created_at: Date.current.all_day) }
 
   def total_amount
     order_items.sum { |item| item.quantity * item.price_at_time }
@@ -39,5 +40,22 @@ class Order < ApplicationRecord
 
   def formatted_total
     "$#{total_amount.to_f.round(2)}"
+  end
+
+  def preparation_time
+    return nil unless started_cooking_at && ready_at
+    ((ready_at - started_cooking_at) / 60).round(1) # in minutes
+  end
+
+  def total_time
+    return nil unless ready_at
+    ((ready_at - created_at) / 60).round(1) # in minutes
+  end
+
+  def estimated_ready_time
+    return nil unless started_cooking_at
+    # Estimate based on menu items - this could be more sophisticated
+    estimated_minutes = order_items.sum { |item| item.menu_item.estimated_prep_time || 15 }
+    started_cooking_at + estimated_minutes.minutes
   end
 end

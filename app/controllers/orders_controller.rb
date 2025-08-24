@@ -1,23 +1,28 @@
 class OrdersController < ApplicationController
+  before_action :set_order, only: [:show, :update_status, :advance_status]
+  
   def index
-    @active_orders = Order.active.includes(:order_items, :menu_items, :customer).order(:created_at)
-    @kitchen_orders = Order.for_kitchen.includes(:order_items, :menu_items)
-    @ready_orders = Order.ready_for_delivery.includes(:order_items, :menu_items)
+    authorize Order
+    @active_orders = policy_scope(Order).active.includes(:order_items, :menu_items, :customer).order(:created_at)
+    @kitchen_orders = policy_scope(Order).for_kitchen.includes(:order_items, :menu_items)
+    @ready_orders = policy_scope(Order).ready_for_delivery.includes(:order_items, :menu_items)
   end
 
   def show
-    @order = Order.find(params[:id])
+    authorize @order
     @order_items = @order.order_items.includes(:menu_item)
   end
 
   def new
     @order = Order.new
+    authorize @order
     @daily_menu = DailyMenu.for_today
     @menu_items_by_category = @daily_menu.items_by_category
   end
 
   def create
     @order = Order.new(order_params)
+    authorize @order
 
     if @order.save
       # Create order items
@@ -46,7 +51,7 @@ class OrdersController < ApplicationController
   end
 
   def update_status
-    @order = Order.find(params[:id])
+    authorize @order, :update_status?
     new_status = params[:status]
 
     if Order::STATUSES.include?(new_status)
@@ -58,16 +63,21 @@ class OrdersController < ApplicationController
   end
 
   def kitchen
-    @orders = Order.for_kitchen.includes(:order_items, :menu_items, :customer).order(:created_at)
+    authorize Order, :kitchen?
+    @orders = policy_scope(Order).for_kitchen.includes(:order_items, :menu_items, :customer).order(:created_at)
   end
 
   def advance_status
-    @order = Order.find(params[:id])
+    authorize @order, :advance_status?
     @order.advance_status!
     redirect_back(fallback_location: orders_path, notice: "Order #{@order.id} status advanced to #{@order.status.humanize}!")
   end
 
   private
+
+  def set_order
+    @order = Order.find(params[:id])
+  end
 
   def order_params
     params.require(:order).permit(:table_number, :special_instructions, :customer_id)
