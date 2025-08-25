@@ -18,7 +18,9 @@ class EnhanceHotelManagementSystem < ActiveRecord::Migration[7.1]
     
     # Add new fields to menu_items table
     add_column :menu_items, :estimated_prep_time, :integer, comment: 'Estimated preparation time in minutes'
-    add_column :menu_items, :ingredients, :text, comment: 'Comma-separated list of ingredients'
+    unless column_exists?(:menu_items, :ingredients)
+      add_column :menu_items, :ingredients, :text, comment: 'Comma-separated list of ingredients'
+    end
     
     # Add new fields to users table if not exists
     unless column_exists?(:users, :name)

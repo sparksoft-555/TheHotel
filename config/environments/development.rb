@@ -1,6 +1,11 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  # Allow Codespaces/GitHub Dev public URLs for CSRF protection
+  config.action_controller.forgery_protection_origin_check = true
+  config.action_controller.allowed_forgery_protection_origins = [
+    %r{https://.*\.app\.github\.dev}
+  ]
   config.hosts << "organic-goldfish-g74w9776qw739g7g-3000.app.github.dev"
   # Allow requests from GitHub Codespaces
   config.hosts << /.*\.app\.github\.dev/

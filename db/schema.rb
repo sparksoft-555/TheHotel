@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_23_214124) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_24_000001) do
   create_table "bills", force: :cascade do |t|
     t.integer "order_id", null: false
     t.decimal "total_amount", precision: 10, scale: 2, null: false
-    t.string "payment_status", default: "pending"
+    t.string "status", default: "pending"
     t.string "payment_method"
     t.datetime "paid_at"
     t.text "notes"
@@ -22,9 +22,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_23_214124) do
     t.decimal "discount_amount", precision: 8, scale: 2, default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "tax_amount", precision: 10, scale: 2
+    t.decimal "service_charge", precision: 10, scale: 2
+    t.decimal "final_amount", precision: 10, scale: 2
+    t.decimal "amount_received", precision: 10, scale: 2
+    t.decimal "change_amount", precision: 10, scale: 2
     t.index ["order_id"], name: "index_bills_on_order_id"
     t.index ["paid_at"], name: "index_bills_on_paid_at"
-    t.index ["payment_status"], name: "index_bills_on_payment_status"
+    t.index ["status"], name: "index_bills_on_status"
   end
 
   create_table "daily_menu_items", force: :cascade do |t|
@@ -78,6 +83,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_23_214124) do
     t.integer "prep_time_minutes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "estimated_prep_time"
     t.index ["available"], name: "index_menu_items_on_available"
     t.index ["category"], name: "index_menu_items_on_category"
   end
@@ -103,6 +109,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_23_214124) do
     t.datetime "estimated_completion"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "started_cooking_at"
+    t.datetime "ready_at"
     t.index ["created_at"], name: "index_orders_on_created_at"
     t.index ["customer_id"], name: "index_orders_on_customer_id"
     t.index ["status"], name: "index_orders_on_status"
@@ -137,6 +145,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_23_214124) do
     t.decimal "break_duration", precision: 4, scale: 2, default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "hourly_rate", precision: 8, scale: 2
     t.index ["approved"], name: "index_work_logs_on_approved"
     t.index ["clock_in"], name: "index_work_logs_on_clock_in"
     t.index ["employee_id"], name: "index_work_logs_on_employee_id"

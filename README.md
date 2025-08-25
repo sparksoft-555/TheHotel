@@ -1,34 +1,31 @@
-# Hotel Management System
 
-This is an Elixir/Phoenix application for managing a hotel's operations, including QR code ordering, kitchen management, cashiering, inventory, and employee hours.
+# Hotel Management System (Rails)
+
+This is a Ruby on Rails application for managing hotel operations.
 
 ## Features
-
-- QR Code Ordering for Customers
 - Menu Management
-- Order Processing (Kitchen, Cashier)
+- Order Processing
 - Inventory Management
 - Employee Work Hours Tracking
 - Managerial Dashboard
 - Accountant/Financial Reports
 
-## Technologies
+## Getting Started
 
-- Elixir
-- Phoenix Framework
-- SurrealDB
-- PostgreSQL (for analytics dashboard)
+### Prerequisites
+- Ruby (see `.ruby-version`)
+- Bundler (`gem install bundler`)
 
-## Setup
+### Setup
+```bash
+bundle install
+bin/rails db:setup
+bin/rails server
+```
 
-1. Install Elixir and Phoenix
-2. Install SurrealDB
-3. Install PostgreSQL
-4. Run `mix deps.get`
-5. Run `mix ecto.create` and `mix ecto.migrate`
-6. Configure SurrealDB connection
-7. Start the application with `mix phx.server`
+- Access the app at http://localhost:3000
 
-## Deployment
-
-(TBD)"# HKMS" 
+## Notes
+- Uses SQLite for development and test by default.
+- For production, update `config/database.yml` as needed.
